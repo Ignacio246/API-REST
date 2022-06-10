@@ -34,3 +34,7 @@ sqlite3 clientes.sqlite < clientes.sql
 ```bash
 .quit
 ```
+## Ejecutar el script de main.py
+```bash
+uvicorn main:app --reload
+```
