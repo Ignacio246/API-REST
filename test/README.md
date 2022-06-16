@@ -1,6 +1,6 @@
 # API-REST
 
-
+## Ejecutar el test_main
 ```bash
-docker build -t api_rest:10.06.22 .
+python3 -m pytest -v
 ```
