@@ -1,4 +1,4 @@
-FROM ububtu:20.04
+FROM ubuntu:20.04
 RUN apt-get update
 RUN apt-get upgrade -y
 RUN apt-get install sqlite3 -y
@@ -9,6 +9,6 @@ ENV  requirements /home/requirements.txt
 
 COPY requirements.txt ${requirements}
 
-RUN pip install -r requirements.txt
+RUN pip3 install -r requirements
 
 WORKDIR /home/
