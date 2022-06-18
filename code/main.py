@@ -61,9 +61,32 @@ async def post_cliente(cliente=Cliente):
     with sqlite3.connect('sql/clientes.sqlite') as connection:
         connection.row_factory = sqlite3.Row
         cursor = connection.cursor()
-        cursor.execute("INSERT INTO clientes (nombre,email VALUES ('ignacio','nacho@email.com')")
+        cursor.execute("INSERT INTO clientes (nombre,email VALUES (4,'ignacio','nacho@email.com')",
+        (Cliente.id_clientes,Cliente.nombre,Cliente.email))
         connection.commit()
         connection.close()
+        return {"message": "Cliente guardado"}
+
+@app.put("/clientes/", response_model=Respuesta)
+async def put_cliente(cliente=Cliente):
+    with sqlite3.connect('sql/clientes.sqlite') as connection:
+        connection.row_factory = sqlite3.Row
+        cursor = connection.cursor()
+        cursor.execute("UPDATE clientes SET nombre = ignacio, email = nachoci12@email.com WHERE id_clientes = 4')",
+        (cliente.id_clientes,cliente.nombre,cliente.email))
+        connection.commit()
+        connection.close()
+        return {"message": "Cliente actualizado"}
+
+@app.delete("/clientes/{id_clientes}", response_model=Respuesta)
+async def delete_cliente(cliente=Cliente):
+    with sqlite3.connect('sql/clientes.sqlite') as connection:
+        connection.row_factory = sqlite3.Row
+        cursor = connection.cursor()
+        cursor.execute("DELETE FROM clientes WHERE ID = 4",(Cliente.id_clientes))
+        connection.commit()
+        connection.close()
+        return {"message": "Cliente eliminado"}
 """
 
 @app.post("/clientes/")

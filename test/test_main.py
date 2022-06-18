@@ -42,3 +42,30 @@ def test_clientes():
     ]
     assert response.status_code == 200
     assert response.json() == data
+
+def test_post_cliente():
+    payload = {"id_cliente":4,"nombre":"ignacio","email":"nacho@email.com"}
+    response = clientes.post("/clientes/", json=payload)
+    data = {"message":"Cliente guardado"}
+    assert response.status_code == 200
+    assert response.json() == data
+
+def test_put_cliente():
+    payload = {
+        "id_clientes": 4,
+        "nombre":"ignacio",
+        "email":"nacho12@email.com",
+    }
+    response = clientes.put("/clientes/", json=payload)
+    data = {"message":"Cliente actualizado"}
+    assert response.status_code == 200
+    assert response.json() == data
+
+def test_delete_cliente():
+    response = clientes.delete("/clientes/4")
+    data = {"message":"Cliente eliminado"}
+    assert response.status_code == 200
+    assert response.json() == data
+
+
+    
