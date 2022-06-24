@@ -14,3 +14,5 @@ INSERT INTO clientes (nombre,email) VALUES
 .headers ON
 
 SELECT * FROM clientes;
+
+

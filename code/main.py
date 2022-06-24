@@ -1,6 +1,12 @@
 from fastapi import FastAPI
+import hashlib  # importa la libreria hashlib
+import sqlite3
+import os
+from typing import List
 
 import sqlite3 
+from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from typing import List
 from pydantic import BaseModel
 
@@ -16,9 +22,7 @@ class Cliente(BaseModel):
     id_clientes: int
     nombre: str
     email: str
-
-app = FastAPI()
-
+    
 
 @app.get("/", response_model=Respuesta)
 async def index():
@@ -89,7 +93,8 @@ async def delete_cliente(cliente=Cliente):
         return {"message": "Cliente eliminado"}
 """
 
-@app.post("/clientes/")
+@app.post("/clientes/"
+    )
 def post_cliente(nombre: str, email:str):
     return f"Cliente {nombre} {email} guardado"
 
