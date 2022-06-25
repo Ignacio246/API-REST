@@ -68,4 +68,3 @@ def test_delete_cliente():
     assert response.json() == data
 
 
-    
