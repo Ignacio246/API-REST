@@ -6,12 +6,28 @@ from typing import List
 from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+origins = [
+    "http://localhost:8080",
+    "http://127.0.0.1:8000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 DATABASE_URL = os.path.join("sql/usuarios.sqlite")
 
 security = HTTPBasic()
+
+class Respuesta(BaseModel):
+    message: str
 
 class Usuarios(BaseModel):
     username: str
@@ -41,6 +57,10 @@ def get_current_level(credentials: HTTPBasicCredentials = Depends(security)):
                 headers={"WWW-Authenticate": "Basic"},
             )
     return user[0]
+@app.get("/", 
+    response_model=Respuesta)
+async def index():
+        return {"message": "API-REST"}
 
 @app.get(
     "/usuarios/",
