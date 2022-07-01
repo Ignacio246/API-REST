@@ -9,8 +9,24 @@ from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from typing import List
 from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
+from fastapi.responses import FileResponse
 
 app = FastAPI()
+
+origins = [
+    "http://localhost:8080",
+    "http://127.0.0.1:8000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class Respuesta(BaseModel):
     message: str
@@ -25,6 +41,15 @@ class Cliente(BaseModel):
     nombre: str
     email: str
     
+
+@app.get("/", response_class=FileResponse)
+async def redirect_typer():
+    with sqlite3.connect('sql/clientes.sqlite') as connection:
+        connection.row_factory = sqlite3.Row
+        cursor = connection.cursor()
+        cursor.execute('SELECT * FROM clientes')
+        response = cursor.fetchall()
+    return FileResponse("/workspace/API-REST/frontend/get_clientes.html")
 
 @app.get("/", response_model=Respuesta)
 async def index():
