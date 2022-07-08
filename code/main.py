@@ -35,10 +35,18 @@ class Cliente(BaseModel):
     nombre: str
     email: str
 
-class Cliente(BaseModel):
+class ClienteIN(BaseModel):
+    nombre: str
+    email: str
+
+class ClienteUP(BaseModel):
     id_clientes: int
     nombre: str
     email: str
+
+class ClienteDE(BaseModel):
+    id_clientes: int
+    
     
 
 
@@ -72,6 +80,47 @@ async def clientes(id_clientes : int):
                 headers={"www-Authenticate": "Basic"},
         )
         return response
+
+@app.post("/clientes/", response_model=Respuesta)
+async def post_clientes(cliente: ClienteIN):
+    with sqlite3.connect('sql/clientes.sqlite') as connection:
+        connection.row_factory = sqlite3.Row
+        cursor = connection.cursor()
+        cursor.execute("INSERT INTO clientes (nombre,email) VALUES (?,?)",
+        (cliente.nombre, cliente.email),
+        )
+        connection.commit()
+        return {"message": "Cliente creado"}
+
+
+@app.put("/clientes/{id_clientes}", response_model=Respuesta)
+async def put_clientes(cliente:ClienteUP):
+    with sqlite3.connect('sql/clientes.sqlite') as connection:
+        connection.row_factory = sqlite3.Row
+        cursor = connection.cursor()
+        cursor.execute("UPDATE clientes set nombre = ?, email = ? where id_clientes = ?""",
+        (cliente.nombre, cliente.email, cliente.id_clientes),
+        )
+        connection.commit()
+        cursor.execute("SELECT *FROM clientes")
+        return {"message": "Cliente Actualizado"}
+
+@app.delete("/clientes/{id_clientes}", response_model=Respuesta)
+async def delete_clientes(cliente:Cliente):
+    with sqlite3.connect('sql/clientes.sqlite') as connection:
+        connection.row_factory = sqlite3.Row
+        cursor = connection.cursor()
+        cursor.execute("DELETE FROM clientes where id_clientes = ?""",
+        (cliente.id_clientes,)
+        )
+        connection.commit()
+        cursor.execute("SELECT *FROM clientes")
+        return {"message": "Cliente Eliminado"}
+
+
+
+
+
 
 """
 @app.post("/cliente/", response_model=Respuesta)

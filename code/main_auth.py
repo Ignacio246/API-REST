@@ -119,7 +119,7 @@ async def put_clientes(level: int = Depends(get_current_level)):
         with sqlite3.connect("sql/clientes.sqlite") as connection:
             connection.row_factory = sqlite3.Row
             cursor = connection.cursor()
-            cursor.execute("""UPDATE clientes set nombre = ? where id_clientes = ?""",("ignaciocandia",4))
+            cursor.execute("""UPDATE clientes set nombre = ? where id_clientes = ?""",("hola",9))
             cursor.execute("SELECT *FROM clientes")
             clientes = cursor.fetchall()
             return clientes
