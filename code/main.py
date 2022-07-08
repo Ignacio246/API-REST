@@ -16,8 +16,7 @@ from fastapi.responses import FileResponse
 app = FastAPI()
 
 origins = [
-    "http://localhost:8080",
-    "http://127.0.0.1:8000",
+    "https://8080-ignacio246-apirest-gznbfv3i6l3.ws-us53.gitpod.io",
 ]
 
 app.add_middleware(
@@ -42,14 +41,6 @@ class Cliente(BaseModel):
     email: str
     
 
-@app.get("/", response_class=FileResponse)
-async def redirect_typer():
-    with sqlite3.connect('sql/clientes.sqlite') as connection:
-        connection.row_factory = sqlite3.Row
-        cursor = connection.cursor()
-        cursor.execute('SELECT * FROM clientes')
-        response = cursor.fetchall()
-    return FileResponse("/workspace/API-REST/frontend/get_clientes.html")
 
 @app.get("/", response_model=Respuesta)
 async def index():
@@ -68,15 +59,21 @@ async def clientes():
 
 
 @app.get("/clientes/{id_clientes}", response_model=Cliente)
-async def clientes():
+async def clientes(id_clientes : int):
     with sqlite3.connect('sql/clientes.sqlite') as connection:
         connection.row_factory = sqlite3.Row
         cursor = connection.cursor()
-        cursor.execute('SELECT * FROM clientes')
+        cursor.execute("SELECT id_clientes,nombre,email FROM clientes where id_clientes = ?",(id_clientes,))
         response = cursor.fetchone()
+        if response is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Cliente no encontrado",
+                headers={"www-Authenticate": "Basic"},
+        )
         return response
 
-
+"""
 @app.post("/cliente/", response_model=Respuesta)
 async def post_cliente(cliente=Cliente):
     with sqlite3.connect('sql/clientes.sqlite') as connection:
@@ -95,7 +92,7 @@ async def put_cliente(cliente=Cliente):
     with sqlite3.connect('sql/clientes.sqlite') as connection:
         connection.row_factory = sqlite3.Row
         cursor = connection.cursor()
-        cursor.execute("""UPDATE clientes set nombre = ? where id_clientes = ?""",("ignaciocandia",4))
+        cursor.execute("UPDATE clientes set nombre = ? where id_clientes = ?",("ignaciocandia",4))
         cursor.execute("SELECT *FROM clientes")
         connection.commit()
         connection.close()
@@ -112,3 +109,15 @@ async def delete_cliente(cliente=Cliente):
         connection.close()
         clientes = cursor.fetchall()
         return clientes
+"""
+
+"""
+@app.get("/", response_class=FileResponse)
+async def redirect_typer():
+    with sqlite3.connect('sql/clientes.sqlite') as connection:
+        connection.row_factory = sqlite3.Row
+        cursor = connection.cursor()
+        cursor.execute('SELECT * FROM clientes')
+        response = cursor.fetchall()
+    return FileResponse("/workspace/API-REST/frontend/get_clientes.html")
+"""
