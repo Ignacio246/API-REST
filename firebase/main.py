@@ -1,11 +1,11 @@
 from fastapi import FastAPI
-from fastapi import Depends, Fastapi, HTTPException, status, Security
+from fastapi import Depends, FastAPI, HTTPException, status, Security
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 import pyrebase
 
-app = Fastapi()
+app = FastAPI()
 
 
 
@@ -25,7 +25,7 @@ firebase=pyrebase.initialize_app(firebaseConfig)
 securityBasic = HTTPBasic()
 securityBearer = HTTPBearer()
 
-@app.get("/", response_model=Respuesta)
+@app.get("/")
 async def index():
     return {"message": "API-REST"}
 
@@ -44,7 +44,8 @@ async def get_token(credentials:HTTPBasicCredentials = Depends(securityBasic)):
         auth = firebase.auth()
         user = auth.sign_in_with_email_and_password(email, password)
         response ={
-            "token": user['idToken']
+            "token": user['idToken'],
+            "uid": user['localId']
         }
         return response
     except Exception as error:
@@ -58,13 +59,13 @@ async def get_token(credentials:HTTPBasicCredentials = Depends(securityBasic)):
     description="Get a user",
     tags=["auth"]
 )
-async def get_user(credentials:HTTPBasicCredentials = Depends(securityBearer)):
+async def get_user(credentials:HTTPAuthorizationCredentials = Depends(securityBearer)):
     try:
         auth = firebase.auth()
         user = auth.get_account_info(credentials.credentials)
         uid =user['users'][0]['localId']
         db = firebase.database()
-        user_data = db.child("users").child(uid).get().val()
+        user_data = db.child("user_data").child(uid).get().val()
         response = {
             "user_data": user_data
         }
