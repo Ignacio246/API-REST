@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from pydantic import BaseModel
 from fastapi import Depends, FastAPI, HTTPException, status, Security
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
@@ -24,6 +25,9 @@ firebase=pyrebase.initialize_app(firebaseConfig)
 
 securityBasic = HTTPBasic()
 securityBearer = HTTPBearer()
+class Usuario(BaseModel):
+    email: str
+    password: str
 
 @app.get("/")
 async def index():
@@ -73,3 +77,27 @@ async def get_user(credentials:HTTPAuthorizationCredentials = Depends(securityBe
     except Exception as error:
          print(f"ERROR: {error}")
     raise HTTPException(status_code = status.HTTP_401_UNAUTHORIZED)
+
+@app.post(
+    "/users/",
+    status_code = status.HTTP_202_ACCEPTED,
+    summary="Get atoken for user",
+    description="Get atoken for user",
+    tags=["auth"]
+)
+async def post_user(usuario:Usuario):
+    try:
+        auth = firebase.auth()
+        user = auth.create_user_with_email_and_password(usuario.email, usuario.password)
+        userI = auth.get_account_info(user['idToken'])
+        uid =userI['users'][0]['localId']
+        db = firebase.database()
+        db.child("users").child(uid).set({"email":usuario.email, "nivel":1})
+        response ={
+            
+            "message":"Usuario agregdo"
+        }
+        return response
+    except Exception as error:
+        print(f"ERROR: {error}")
+        raise HTTPException(status_code = status.HTTP_401_UNAUTHORIZED)
