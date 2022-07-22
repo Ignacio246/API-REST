@@ -12,8 +12,8 @@ app = FastAPI()
 
 
 origins = [
-    "https://1234-ignacio246-apirest-gznbfv3i6l3.ws-us53.gitpod.io",
-    "https://8080-ignacio246-apirest-gznbfv3i6l3.ws-us53.gitpod.io",
+    "https://1234-ignacio246-apirest-gznbfv3i6l3.ws-us54.gitpod.io",
+    "https://8080-ignacio246-apirest-gznbfv3i6l3.ws-us54.gitpod.io",
     "https://8000-ignacio246-apirest-gznbfv3i6l3.ws-us54.gitpod.io"
 ]
 
@@ -89,7 +89,7 @@ async def get_user(credentials:HTTPAuthorizationCredentials = Depends(securityBe
         user = auth.get_account_info(credentials.credentials)
         uid =user['users'][0]['localId']
         db = firebase.database()
-        user_data = db.child("user_data").child(uid).get().val()
+        user_data = db.child("users").child(uid).get().val()
         response = {
             "user_data": user_data
         }
@@ -102,8 +102,8 @@ async def get_user(credentials:HTTPAuthorizationCredentials = Depends(securityBe
     "/users/",
     response_model=Respuesta,
     status_code = status.HTTP_202_ACCEPTED,
-    summary="Get atoken for user",
-    description="Get atoken for user",
+    summary="Create a user",
+    description="Create a user",
     tags=["auth"]
 )
 async def post_user(usuario:Usuario):

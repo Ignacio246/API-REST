@@ -16,7 +16,8 @@ from fastapi.responses import FileResponse
 app = FastAPI()
 
 origins = [
-    "https://8080-ignacio246-apirest-gznbfv3i6l3.ws-us53.gitpod.io",
+    "https://8080-ignacio246-apirest-gznbfv3i6l3.ws-us54.gitpod.io",
+    "https://8000-ignacio246-apirest-gznbfv3i6l3.ws-us54.gitpod.io"
 ]
 
 app.add_middleware(
