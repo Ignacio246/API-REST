@@ -122,3 +122,30 @@ async def post_user(usuario:Usuario):
     except Exception as error:
         print(f"ERROR: {error}")
         raise HTTPException(status_code = status.HTTP_401_UNAUTHORIZED)
+
+
+@app.get(
+    "/users/token",
+    status_code = status.HTTP_202_ACCEPTED,
+    summary="Get a user",
+    description="Get a user",
+    tags=["auth"]
+)
+async def get_token(usuario:Usuario, credentials:HTTPBasicCredentials = Depends(securityBasic)):
+    try:
+        email = credentials.username
+        password = credentials.password
+        auth = firebase.auth()
+        user = auth.sign_in_with_email_and_password(usuario.email, usuario.password)
+        response ={
+            "token": user['idToken'],
+            "uid": user['localId']
+        }
+        return response
+    except Exception as error:
+        print(f"ERROR: {error}")
+        raise HTTPException(status_code = status.HTTP_401_UNAUTHORIZED)
+
+
+#auth
+#db.child("users").child(uid).push(user)
