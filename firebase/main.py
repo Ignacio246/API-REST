@@ -1,13 +1,29 @@
+import hashlib
 from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi import Depends, FastAPI, HTTPException, status, Security
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi.middleware.cors import CORSMiddleware
 
 import pyrebase
 
 app = FastAPI()
 
+
+origins = [
+    "https://1234-ignacio246-apirest-gznbfv3i6l3.ws-us53.gitpod.io",
+    "https://8080-ignacio246-apirest-gznbfv3i6l3.ws-us53.gitpod.io",
+    "https://8000-ignacio246-apirest-gznbfv3i6l3.ws-us54.gitpod.io"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 firebaseConfig={
@@ -25,6 +41,10 @@ firebase=pyrebase.initialize_app(firebaseConfig)
 
 securityBasic = HTTPBasic()
 securityBearer = HTTPBearer()
+
+class Respuesta(BaseModel):
+    message: str
+
 class Usuario(BaseModel):
     email: str
     password: str
@@ -80,6 +100,7 @@ async def get_user(credentials:HTTPAuthorizationCredentials = Depends(securityBe
 
 @app.post(
     "/users/",
+    response_model=Respuesta,
     status_code = status.HTTP_202_ACCEPTED,
     summary="Get atoken for user",
     description="Get atoken for user",
@@ -93,7 +114,7 @@ async def post_user(usuario:Usuario):
         uid =userI['users'][0]['localId']
         db = firebase.database()
         db.child("users").child(uid).set({"email":usuario.email, "nivel":1})
-        response ={
+        return {
             
             "message":"Usuario agregdo"
         }
