@@ -38,6 +38,8 @@ firebaseConfig={
 }
 
 firebase=pyrebase.initialize_app(firebaseConfig)
+auth = firebase.auth()
+db = firebase.database()
 
 securityBasic = HTTPBasic()
 securityBearer = HTTPBearer()
@@ -84,11 +86,10 @@ async def get_token(credentials:HTTPBasicCredentials = Depends(securityBasic)):
     tags=["auth"]
 )
 async def get_user(credentials:HTTPAuthorizationCredentials = Depends(securityBearer)):
-    try:
-        auth = firebase.auth()
+    try:        
         user = auth.get_account_info(credentials.credentials)
         uid =user['users'][0]['localId']
-        db = firebase.database()
+        
         user_data = db.child("users").child(uid).get().val()
         response = {
             "user_data": user_data
@@ -123,7 +124,63 @@ async def post_user(usuario:Usuario):
         print(f"ERROR: {error}")
         raise HTTPException(status_code = status.HTTP_401_UNAUTHORIZED)
 
+@app.put(
+    "/users/token",
+    response_model=Respuesta,
+    status_code = status.HTTP_202_ACCEPTED,
+    summary="Update a user",
+    description="Update a user",
+    tags=["auth"]
+)
+async def put_user(usuario:Usuario, credentials:HTTPAuthorizationCredentials = Depends(securityBearer)):
+    try:
+        
+        userI = auth.get_account_info(credentials.credentials)
+        uid =userI['users'][0]['localId']
+        db = firebase.database()
+        user_data = db.child("users").child(uid).update({"email":usuario.email, "nivel":1})
+        return {
+            
+            "message":"Usuario actualizado"
+        }
+        response = {
+            "user_data": user_data
+        }
+        return response
+    except Exception as error:
+        print(f"ERROR: {error}")
+        raise HTTPException(status_code = status.HTTP_401_UNAUTHORIZED)
 
+@app.delete(
+    "/users/token",
+    response_model=Respuesta,
+    status_code = status.HTTP_202_ACCEPTED,
+    summary="Delete a user",
+    description="Delete a user",
+    tags=["auth"]
+)
+async def delete_user(credentials:HTTPAuthorizationCredentials = Depends(securityBearer)):
+    try:
+        
+        userI = auth.get_account_info(credentials.credentials)
+        uid =userI['users'][0]['localId']
+        db = firebase.database()
+        user_data = db.child("users").child(uid).remove()
+        return {
+            
+            "message":"Usuario eliminado"
+        }
+        response = {
+            "user_data": user_data
+        }
+        return response
+    except Exception as error:
+        print(f"ERROR: {error}")
+        raise HTTPException(status_code = status.HTTP_401_UNAUTHORIZED)
+
+
+
+"""
 @app.get(
     "/users/token",
     status_code = status.HTTP_202_ACCEPTED,
@@ -146,6 +203,6 @@ async def get_token(usuario:Usuario, credentials:HTTPBasicCredentials = Depends(
         print(f"ERROR: {error}")
         raise HTTPException(status_code = status.HTTP_401_UNAUTHORIZED)
 
-
+"""
 #auth
 #db.child("users").child(uid).push(user)
