@@ -11,7 +11,7 @@ function postUsuario(){
     console.log("password: " + password.value);
 
     var request = new XMLHttpRequest();
-    request.open('POST', 'https://8000-ignacio246-apirest-gznbfv3i6l3.ws-us54.gitpod.io/users/', true);
+    request.open('POST', 'https://8000-ignacio246-apirest-gznbfv3i6l3.ws-us59.gitpod.io/users/', true);
     request.setRequestHeader("Content-Type","application/json");
     request.setRequestHeader("Accept","application/json");
 

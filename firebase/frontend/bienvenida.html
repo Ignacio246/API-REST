@@ -6,5 +6,24 @@
 </head>
 <body bgcolor="#32999c"><center>
     <h1>Bienvenido</h1>
+    <table id="tabla_clientes">
+        <thead id="thead_clientes">
+            <tr>
+                <th>Detalles</th>
+                <th>Actualizar</th>
+                <th>Borrar</th>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody id="tbody_clientes">
+            
+        </tbody>
+    </table>
+    <script type="text/javascript" src="/static/js/get_users.js"></script>
+    <script async>
+        document.body.onload = getUsers();
+    </script>
 </body></center>
 </html>

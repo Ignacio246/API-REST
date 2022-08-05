@@ -14,7 +14,9 @@ app = FastAPI()
 origins = [
     "https://1234-ignacio246-apirest-gznbfv3i6l3.ws-us54.gitpod.io",
     "https://8080-ignacio246-apirest-gznbfv3i6l3.ws-us54.gitpod.io",
-    "https://8000-ignacio246-apirest-gznbfv3i6l3.ws-us54.gitpod.io"
+    "https://8000-ignacio246-apirest-gznbfv3i6l3.ws-us54.gitpod.io",
+    "https://8000-ignacio246-apirest-gznbfv3i6l3.ws-us59.gitpod.io",
+    "https://8080-ignacio246-apirest-gznbfv3i6l3.ws-us59.gitpod.io"
 ]
 
 app.add_middleware(
@@ -59,8 +61,8 @@ async def index():
 @app.get(
     "/users/token",
     status_code = status.HTTP_202_ACCEPTED,
-    summary="Get atoken for user",
-    description="Get atoken for user",
+    summary="Get a token for user",
+    description="Get a token for user",
     tags=["auth"]
 )
 async def get_token(credentials:HTTPBasicCredentials = Depends(securityBasic)):
@@ -68,7 +70,7 @@ async def get_token(credentials:HTTPBasicCredentials = Depends(securityBasic)):
         email = credentials.username
         password = credentials.password
         auth = firebase.auth()
-        user = auth.sign_in_with_email_and_password(email, password)
+        user = auth.sign_in_with_email_and_password(email,password)
         response ={
             "token": user['idToken'],
             "uid": user['localId']
@@ -86,10 +88,11 @@ async def get_token(credentials:HTTPBasicCredentials = Depends(securityBasic)):
     tags=["auth"]
 )
 async def get_user(credentials:HTTPAuthorizationCredentials = Depends(securityBearer)):
-    try:        
+    try:
+        auth = firebase.auth()        
         user = auth.get_account_info(credentials.credentials)
         uid =user['users'][0]['localId']
-        
+        db = firebase.database()
         user_data = db.child("users").child(uid).get().val()
         response = {
             "user_data": user_data
