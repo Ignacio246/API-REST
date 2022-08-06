@@ -59,7 +59,7 @@ async def index():
 
 
 @app.get(
-    "/users/token",
+    "/users/token/",
     status_code = status.HTTP_202_ACCEPTED,
     summary="Get a token for user",
     description="Get a token for user",
@@ -95,7 +95,7 @@ async def get_user(credentials:HTTPAuthorizationCredentials = Depends(securityBe
         db = firebase.database()
         user_data = db.child("users").child(uid).get().val()
         response = {
-            "user_data": user_data
+            "users": user_data
         }
         return response
     except Exception as error:
