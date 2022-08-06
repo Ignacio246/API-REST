@@ -11,7 +11,7 @@ function postCliente(){
     console.log("email: " + email.value);
 
     var request = new XMLHttpRequest();
-    request.open('POST', 'https://8000-ignacio246-apirest-gznbfv3i6l3.ws-us53.gitpod.io/clientes/', true);
+    request.open('POST', 'http://127.0.0.1:8000/clientes/', true);
     request.setRequestHeader("Content-Type","application/json");
     request.setRequestHeader("Accept","application/json");
 

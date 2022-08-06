@@ -6,7 +6,7 @@ function getClientes(){
     const request = new XMLHttpRequest();
 
 
-    request.open('GET', 'https://8000-ignacio246-apirest-gznbfv3i6l3.ws-us54.gitpod.io/clientes/', true);
+    request.open('GET', 'http://127.0.0.1:8000/clientes/', true);
     request.setRequestHeader("Accept", "application/json");
 
     const  tabla   = document.getElementById("tabla_clientes");

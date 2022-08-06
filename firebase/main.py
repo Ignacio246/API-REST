@@ -16,7 +16,9 @@ origins = [
     "https://8080-ignacio246-apirest-gznbfv3i6l3.ws-us54.gitpod.io",
     "https://8000-ignacio246-apirest-gznbfv3i6l3.ws-us54.gitpod.io",
     "https://8000-ignacio246-apirest-gznbfv3i6l3.ws-us59.gitpod.io",
-    "https://8080-ignacio246-apirest-gznbfv3i6l3.ws-us59.gitpod.io"
+    "https://8080-ignacio246-apirest-gznbfv3i6l3.ws-us59.gitpod.io",
+    "http://127.0.0.1:8000",
+    "http://localhost:8080"
 ]
 
 app.add_middleware(
@@ -120,7 +122,7 @@ async def post_user(usuario:Usuario):
         db.child("users").child(uid).set({"email":usuario.email, "nivel":1})
         return {
             
-            "message":"Usuario agregdo"
+            "message":"Cliente agregdo"
         }
         return response
     except Exception as error:

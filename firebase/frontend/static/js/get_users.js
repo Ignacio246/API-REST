@@ -6,7 +6,7 @@ function getUsers(){
     const request = new XMLHttpRequest();
 
 
-    request.open('GET', 'https://8000-ignacio246-apirest-gznbfv3i6l3.ws-us59.gitpod.io/users/', true);
+    request.open('GET', 'http://127.0.0.1:8000/users/', true);
     request.setRequestHeader("Accept", "application/json");
 
     const  tabla   = document.getElementById("tabla_clientes");
@@ -26,23 +26,23 @@ function getUsers(){
             var td_get = document.createElement("td");
             var td_update = document.createElement("td");
             var td_delete = document.createElement("td");
-            var td_id_clientes = document.createElement('td');
-            var td_nombre = document.createElement('td');
+            var td_uid = document.createElement('td');
             var td_email = document.createElement('td');
+            var td_nivel = document.createElement('td');
 
-            td_get.innerHTML = "<a href='/get_cliente.html?"+json[row].id_clientes+"'>Detalle</a>";
-            td_update.innerHTML = "<a href='/update_cliente.html?"+json[row].id_clientes+"'>Actualizar</a>";
+            td_get.innerHTML = "<a href='/get_cliente.html?"+json[row].uid+"'>Detalle</a>";
+            td_update.innerHTML = "<a href='/update_cliente.html?"+json[row].uid+"'>Actualizar</a>";
             td_delete.innerHTML = "<a href='/delete_cliente.html?"+json[row].id_clientes+"'>Borrar</a>";
-            td_id_clientes.innerHTML = json[row].id_clientes;
-            td_nombre.innerHTML = json[row].nombre;
+            td_uid.innerHTML = json[row].id_clientes;
             td_email.innerHTML = json[row].email;
+            td_nivel.innerHTML = json[row].nivel;
 
             tr.appendChild(td_get);
             tr.appendChild(td_update);
             tr.appendChild(td_delete);
-            tr.appendChild(td_id_clientes);
-            tr.appendChild(td_nombre);
+            tr.appendChild(td_uid);
             tr.appendChild(td_email);
+            tr.appendChild(td_nivel);
 
             tbody.appendChild(tr);
 

@@ -17,7 +17,9 @@ app = FastAPI()
 
 origins = [
     "https://8080-ignacio246-apirest-gznbfv3i6l3.ws-us54.gitpod.io",
-    "https://8000-ignacio246-apirest-gznbfv3i6l3.ws-us54.gitpod.io"
+    "https://8000-ignacio246-apirest-gznbfv3i6l3.ws-us54.gitpod.io",
+    "http://localhost:1234",
+    "http://127.0.0.1:8000"
 ]
 
 app.add_middleware(

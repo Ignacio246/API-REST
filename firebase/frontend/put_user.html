@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <title>Firebase</title>
+    <title>DOM JavaScript</title>
 </head>
 <body>
-    <h1>Actualizar un Usuario</h1>
+    <h1>Actualizar un Cliente</h1>
     <form id="form_cliente">
-        
+        <label for="id_clientes">ID</label>
+        <br>
+        <input type="text" id="id_clientes" name="id_clientes"/>
         <br>
         <label for="nombre">Nombre</label>
         <br>
@@ -16,11 +18,11 @@
         <br>
         <input type="email" id="email" name="email"/>
         <br>
-        <input type="button" value="Actualizar" onclick="putCliente()"/>
+        <input type="button" value="Actualizar" onclick="putUsers()"/>
         <br>
         <a href="/get_clientes.html">Cancelar</a>
     </form>
-    <script type="text/javascript" src="/static/js/put_cliente.js"></script>
+    <script type="text/javascript" src="/static/js/put_user.js"></script>
     <script type="text/javascript" src="/static/js/get_cliente.js"></script>
     <script>
         document.body.onload = getCliente();

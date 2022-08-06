@@ -3,7 +3,7 @@ function getCliente(){
     console.log("id_clientes: " + id_clientes);
 
     const request = new XMLHttpRequest();
-    request.open("GET", "https://8000-ignacio246-apirest-gznbfv3i6l3.ws-us53.gitpod.io/clientes/"+id_clientes,true);
+    request.open("GET", "http://127.0.0.1:8000/clientes/"+id_clientes,true);
     request.setRequestHeader("Accept", "application/json");
 
     request.onload = () =>{
