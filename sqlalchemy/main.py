@@ -1,6 +1,6 @@
-import databases
+import databases    #pip3 install databases #pip3 install aiosqlite
 import os
-from fastapi import FastAPI
+from fastapi import FastAPI     #pip3 install fastapi, uvicorn
 from pydantic import BaseModel
 from typing import List
 
@@ -42,7 +42,7 @@ app = FastAPI()
 
 @app.get("/", response_model=Respuesta)
 async def index():
-    return {"message": "API-REST"}
+    return {"message": "SQLALCHEMY"}
 
 @app.get("/clientes", response_model=List[Cliente])
 async def get_clientes():
